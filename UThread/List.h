@@ -10,7 +10,7 @@
 //        - Mutexes
 //        - Semaphores
 //
-// Authors: Carlos Martins, João Trindade, Duarte Nunes
+// Authors: Carlos Martins, Joao Trindade, Duarte Nunes
 //
 //
 
@@ -21,7 +21,7 @@
 #ifndef CONTAINING_RECORD
 
 #define CONTAINING_RECORD(address, type, field) \
-		((type *)((PCHAR)(address) - (size_t)(&((type *)0)->field)))
+        ((type *)((PCHAR)(address) - (size_t)(&((type *)0)->field)))
 
 #endif
 
@@ -32,10 +32,10 @@
 FORCEINLINE
 VOID
 InitializeListHead (
-	__out PLIST_ENTRY ListHead
-	)
+    __out PLIST_ENTRY ListHead
+    )
 {
-	ListHead->Flink = ListHead->Blink = ListHead;
+    ListHead->Flink = ListHead->Blink = ListHead;
 }
 
 //
@@ -45,10 +45,10 @@ InitializeListHead (
 FORCEINLINE
 BOOL
 IsListEmpty (
-	__in LIST_ENTRY * ListHead
-	)
+    __in LIST_ENTRY * ListHead
+    )
 {
-	return (BOOL) (ListHead->Flink == ListHead);
+    return (BOOL) (ListHead->Flink == ListHead);
 }
 
 //
@@ -59,17 +59,17 @@ IsListEmpty (
 FORCEINLINE
 BOOL
 RemoveEntryList (
-	__in PLIST_ENTRY Entry
-	)
+    __in PLIST_ENTRY Entry
+    )
 {
-	PLIST_ENTRY Blink;
-	PLIST_ENTRY Flink;
+    PLIST_ENTRY Blink;
+    PLIST_ENTRY Flink;
 
-	Flink = Entry->Flink;
-	Blink = Entry->Blink;
-	Blink->Flink = Flink;
-	Flink->Blink = Blink;
-	return Flink == Blink;
+    Flink = Entry->Flink;
+    Blink = Entry->Blink;
+    Blink->Flink = Flink;
+    Flink->Blink = Blink;
+    return Flink == Blink;
 }
 
 //
@@ -79,17 +79,17 @@ RemoveEntryList (
 FORCEINLINE
 PLIST_ENTRY
 RemoveHeadList (
-	__inout PLIST_ENTRY ListHead
-	)
+    __inout PLIST_ENTRY ListHead
+    )
 {
-	PLIST_ENTRY Flink;
-	PLIST_ENTRY Entry;
+    PLIST_ENTRY Flink;
+    PLIST_ENTRY Entry;
 
-	Entry = ListHead->Flink;
-	Flink = Entry->Flink;
-	ListHead->Flink = Flink;
-	Flink->Blink = ListHead;
-	return Entry;
+    Entry = ListHead->Flink;
+    Flink = Entry->Flink;
+    ListHead->Flink = Flink;
+    Flink->Blink = ListHead;
+    return Entry;
 }
 
 //
@@ -99,17 +99,17 @@ RemoveHeadList (
 FORCEINLINE
 PLIST_ENTRY
 RemoveTailList (
-	__inout PLIST_ENTRY ListHead
-	)
+    __inout PLIST_ENTRY ListHead
+    )
 {
-	PLIST_ENTRY Blink;
-	PLIST_ENTRY Entry;
+    PLIST_ENTRY Blink;
+    PLIST_ENTRY Entry;
 
-	Entry = ListHead->Blink;
-	Blink = Entry->Blink;
-	ListHead->Blink = Blink;
-	Blink->Flink = ListHead;
-	return Entry;
+    Entry = ListHead->Blink;
+    Blink = Entry->Blink;
+    ListHead->Blink = Blink;
+    Blink->Flink = ListHead;
+    return Entry;
 }
 
 //
@@ -119,17 +119,17 @@ RemoveTailList (
 FORCEINLINE
 VOID
 InsertTailList (
-	__in PLIST_ENTRY ListHead,
-	__out PLIST_ENTRY Entry
-	)
+    __in PLIST_ENTRY ListHead,
+    __out PLIST_ENTRY Entry
+    )
 {
-	PLIST_ENTRY Blink;
+    PLIST_ENTRY Blink;
 
-	Blink = ListHead->Blink;
-	Entry->Flink = ListHead;
-	Entry->Blink = Blink;
-	Blink->Flink = Entry;
-	ListHead->Blink = Entry;
+    Blink = ListHead->Blink;
+    Entry->Flink = ListHead;
+    Entry->Blink = Blink;
+    Blink->Flink = Entry;
+    ListHead->Blink = Entry;
 }
 
 //
@@ -139,15 +139,15 @@ InsertTailList (
 FORCEINLINE
 VOID
 InsertHeadList (
-	__inout PLIST_ENTRY ListHead,
-	__out PLIST_ENTRY Entry
-	)
+    __inout PLIST_ENTRY ListHead,
+    __out PLIST_ENTRY Entry
+    )
 {
-	PLIST_ENTRY Flink;
+    PLIST_ENTRY Flink;
 
-	Flink = ListHead->Flink;
-	Entry->Flink = Flink;
-	Entry->Blink = ListHead;
-	Flink->Blink = Entry;
-	ListHead->Flink = Entry;
+    Flink = ListHead->Flink;
+    Entry->Flink = Flink;
+    Entry->Blink = ListHead;
+    Flink->Blink = Entry;
+    ListHead->Flink = Entry;
 }

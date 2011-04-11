@@ -10,7 +10,7 @@
 //        - Mutexes
 //        - Semaphores
 //
-// Authors: Carlos Martins, João Trindade, Duarte Nunes
+// Authors: Carlos Martins, Joao Trindade, Duarte Nunes
 // 
 //
 
