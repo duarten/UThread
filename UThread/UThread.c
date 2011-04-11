@@ -272,7 +272,6 @@ UtCreate (
     return (HANDLE) Thread;
 }
 
-
 //
 // Terminates the execution of the currently running thread. All associated resources
 // will be released after the context switch to the next ready thread.
@@ -305,7 +304,7 @@ UtYield (
         //
 
         InsertTailList(&ReadyQueue, &RunningThread->Link);
-        UtPark();
+        ContextSwitch(RunningThread, CONTAINING_RECORD(RemoveHeadList(&ReadyQueue), UTHREAD, Link));
     }
 }
 
