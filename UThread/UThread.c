@@ -257,9 +257,9 @@ UtCreate (
     //
     
     Thread->ThreadContext->EDI = 0x33333333;
-    Thread->ThreadContext->EBX = 0x11111111;    
-    Thread->ThreadContext->EBP = 0x00000000;
+    Thread->ThreadContext->EBX = 0x11111111;
     Thread->ThreadContext->ESI = 0x22222222;
+    Thread->ThreadContext->EBP = 0x00000000;
     Thread->ThreadContext->RetAddr = InternalStart;
 
     //
