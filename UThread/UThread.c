@@ -128,7 +128,7 @@ InternalExit (
 
 FORCEINLINE
 PUTHREAD
-SelectNextReadyThread (
+PluckNextReadyThread (
     )
 {
     return IsListEmpty(&ReadyQueue) 
@@ -170,7 +170,7 @@ UtRun (
     Thread.Function = (UT_FUNCTION) UtRun;
 #endif
     MainThread = &Thread;
-    ContextSwitch(&Thread, SelectNextReadyThread());
+    ContextSwitch(&Thread, PluckNextReadyThread());
 
     //
     // When we get here, there are no more runnable user threads.
@@ -256,10 +256,10 @@ UtCreate (
     // place InternalStart's address on the processor's IP.
     //
     
-    Thread->ThreadContext->EBX = 0x11111111;
-    Thread->ThreadContext->ESI = 0x22222222;
     Thread->ThreadContext->EDI = 0x33333333;
-    Thread->ThreadContext->EBP = 0x00000000;									  
+    Thread->ThreadContext->EBX = 0x11111111;    
+    Thread->ThreadContext->EBP = 0x00000000;
+    Thread->ThreadContext->ESI = 0x22222222;
     Thread->ThreadContext->RetAddr = InternalStart;
 
     //
@@ -267,7 +267,7 @@ UtCreate (
     //
     
     NumberOfThreads += 1;
-    UtUnpark(Thread);
+    UtUnpark((HANDLE) Thread);
     
     return (HANDLE) Thread;
 }
@@ -283,7 +283,7 @@ UtExit (
     )
 {
     NumberOfThreads -= 1;	
-    InternalExit(RunningThread, SelectNextReadyThread());
+    InternalExit(RunningThread, PluckNextReadyThread());
     _ASSERTE(!"supposed to be here!");
 }
 
@@ -327,7 +327,7 @@ VOID
 UtPark (
     )
 {
-    ContextSwitch(RunningThread, SelectNextReadyThread());
+    ContextSwitch(RunningThread, PluckNextReadyThread());
 }
 
 //
@@ -382,16 +382,16 @@ ContextSwitch (
         // having been placed there by the call to this function.
         //
 
-        push	ebp
-        push	ebx
-        push	esi
-        push	edi
+        push    ebp
+        push    ebx
+        push    esi
+        push    edi
 
         //
         // Save ESP in CurrentThread->ThreadContext.
         //
 
-        mov		dword ptr [ecx].ThreadContext, esp
+        mov     dword ptr [ecx].ThreadContext, esp
 
         //
         // Set NextThread as the running thread.
@@ -404,12 +404,12 @@ ContextSwitch (
         // where the registers are saved.
         //
 
-        mov		esp, dword ptr [edx].ThreadContext
+        mov     esp, dword ptr [edx].ThreadContext
         
-        pop		edi
-        pop		esi
-        pop		ebx
-        pop		ebp
+        pop     edi
+        pop     esi
+        pop     ebx
+        pop     ebp
 
         //
         // Jump to the return address saved on NextThread's stack when 
@@ -465,7 +465,7 @@ InternalExit (
         // memory being freed -- the stack.
         //
 
-        mov		esp, dword ptr [edx].ThreadContext
+        mov     esp, dword ptr [edx].ThreadContext
 
         call    CleanupThread
 
@@ -473,10 +473,10 @@ InternalExit (
         // Finish switching in NextThread.
         //
 
-        pop		edi
-        pop		esi
-        pop		ebx
-        pop		ebp
+        pop     edi
+        pop     esi
+        pop     ebx
+        pop     ebp
 
         ret
     }
